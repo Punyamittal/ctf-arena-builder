@@ -6,95 +6,65 @@ export interface Challenge {
   basePoints: number;
   flag: string;
   hints: [string, string];
+  hintTimes: [number, number]; // [Hint 1 time in ms, Hint 2 time in ms]
   solved: boolean;
   solvedAt?: number;
+  fileUrl?: string;
 }
 
 export const challenges: Challenge[] = [
   {
-    id: "web-1",
-    title: "Hidden in Plain Sight",
-    category: "Web",
-    description: "A suspicious website has been discovered. The flag is hidden somewhere in the page source. Inspect carefully — not everything is visible to the naked eye.\n\nURL: https://ctf-challenge.example.com/hidden\n\nLook beyond what the browser renders. Developer tools are your friend.",
-    basePoints: 100,
-    flag: "FLAG{v13w_s0urc3_m4st3r}",
-    hints: [
-      "Try viewing the page source code. HTML comments can hide secrets.",
-      "Look for hidden elements with display:none or visibility:hidden in the CSS."
-    ],
-    solved: false,
-  },
-  {
-    id: "crypto-1",
-    title: "Caesar's Secret",
-    category: "Crypto",
-    description: "Julius Caesar had a favorite cipher. We intercepted this message:\n\nSYNT{ebg13_vf_sha}\n\nCan you decode it and find the flag?",
-    basePoints: 100,
-    flag: "FLAG{rot13_is_fun}",
-    hints: [
-      "This is one of the oldest ciphers in history. It shifts letters by a fixed number.",
-      "ROT13 is a special case of Caesar cipher with a shift of 13."
-    ],
-    solved: false,
-  },
-  {
     id: "forensics-1",
-    title: "Pixel Perfect",
+    title: "Money Laundering Part 1",
     category: "Forensics",
-    description: "An image file was recovered from a compromised server. At first glance it looks normal, but there's more than meets the eye.\n\nAnalyze the image metadata and hidden data layers to extract the flag.",
+    description: "A network traffic capture (pcap) was found on a suspicious server. It seems like someone was trying to hide their tracks while transferring digital assets. Can you trace the laundering process?\n\nFile: money_laundering_part1.pcap",
     basePoints: 100,
-    flag: "FLAG{m3tad4ta_h1dd3n}",
+    flag: "FLAG{D1RT_M0N3Y_H1DD3N_1N_PLA1N_S1GHT}",
     hints: [
-      "Image files contain metadata (EXIF data). Tools like exiftool can reveal hidden information.",
-      "Try checking the file with steganography tools. The flag might be embedded in the least significant bits."
+      "Open the pcap file in Wireshark and look for common protocols like HTTP or FTP.",
+      "Check for exported objects or data streams that might contain the flag."
     ],
+    hintTimes: [5 * 60 * 1000, 10 * 60 * 1000], // 5m, 10m
     solved: false,
+    fileUrl: "/money_laundering_part1.pcap",
   },
   {
-    id: "reverse-1",
-    title: "Binary Whispers",
-    category: "Reverse",
-    description: "A mysterious binary string was found on a hacker's terminal:\n\n01000110 01001100 01000001 01000111 01111011 01100010 00110001 01101110 01100001 01110010 01111001 01011111 01100010 00110000 01110011 01110011 01111101\n\nDecode the whispers.",
-    basePoints: 100,
-    flag: "FLAG{b1nary_b0ss}",
+    id: "forensics-2",
+    title: "Money Laundering Part 2",
+    category: "Forensics",
+    description: "The trail continues. The laundered assets are moving through even more complex channels. The second part of the capture contains deeper obfuscation. Find the final destination of the flag.\n\nFile: money_laundering_part2.pcap",
+    basePoints: 200,
+    flag: "FLAG{G3TT1NG_TUFF3R_3HHEHEHE}",
     hints: [
-      "Each group of 8 digits represents one character in binary (ASCII).",
-      "Convert each byte from binary to decimal, then to its ASCII character."
+      "Look for encrypted or unusual traffic. Sometimes data is hidden in the TCP/UDP payload in non-standard ways.",
+      "Use 'follow stream' on interesting looking connections to see the full data exchange."
     ],
+    hintTimes: [20 * 60 * 1000, 25 * 60 * 1000], // 20m, 25m
     solved: false,
+    fileUrl: "/money_laundering_part2.pcap",
   },
   {
-    id: "misc-1",
-    title: "The Missing Piece",
-    category: "Misc",
-    description: "We found a strange encoded string in a database dump:\n\nRkxBR3tiNHNlNjRfZDNjMGQzfQ==\n\nSomething about this encoding is very... basic.",
-    basePoints: 100,
-    flag: "FLAG{b4se64_d3c0d3}",
+    id: "forensics-3",
+    title: "Chal.jpg",
+    category: "Forensics",
+    description: "A simple image file. Or is it? There's a secret hidden within these pixels that only a keen eye—and the right tools—can reveal.\n\nFile: chal.jpg",
+    basePoints: 150,
+    flag: "FLAG{C0L0R5_OR_WH4TTTTT}",
     hints: [
-      "The '==' padding at the end is a strong hint about the encoding type.",
-      "Base64 is a common encoding scheme. Try decoding it with any Base64 decoder."
+      "Check the image metadata using strings or exiftool.",
+      "Try using steganography tools like steghide or zsteg if the metadata doesn't yield results."
     ],
+    hintTimes: [35 * 60 * 1000, 45 * 60 * 1000], // 35m, 45m
     solved: false,
-  },
-  {
-    id: "web-2",
-    title: "Cookie Monster",
-    category: "Web",
-    description: "A web application stores sensitive data in browser cookies. The admin left something juicy behind.\n\nVisit the login page and inspect what's stored in your cookies. The flag is hiding in plain sight.",
-    basePoints: 100,
-    flag: "FLAG{c00k13_th13f}",
-    hints: [
-      "Open DevTools → Application → Cookies to see what's stored.",
-      "Look for a cookie named 'secret' or 'admin_flag'. Its value might be encoded."
-    ],
-    solved: false,
+    fileUrl: "/chal.jpg",
   },
 ];
 
 export const categoryColors: Record<Challenge["category"], string> = {
   Web: "primary",
   Crypto: "secondary",
-  Forensics: "success",
+  Forensics: "warning", // Forensics is yellow/warning in this theme
   Reverse: "warning",
   Misc: "muted-foreground",
 };
+

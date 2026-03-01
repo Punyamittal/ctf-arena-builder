@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Send, CheckCircle, XCircle, Lightbulb, Lock, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Send, CheckCircle, XCircle, Lightbulb, Lock, AlertTriangle, Download } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useGameState } from "@/hooks/useGameState";
+import AnimatedGrid from "@/components/AnimatedGrid";
 
 const ChallengePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { challenges, score, endTime, getCurrentPoints, getAvailableHints, submitFlag } = useGameState();
+  const { challenges, score, endTime, isStarted, getCurrentPoints, getAvailableHints, submitFlag } = useGameState();
 
   const challenge = challenges.find((c) => c.id === id);
   const [flag, setFlag] = useState("");
@@ -44,45 +45,73 @@ const ChallengePage = () => {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <button
           onClick={() => navigate("/dashboard")}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6"
+          className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-primary/40 hover:text-primary transition-colors mb-8"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Challenges
+          <ArrowLeft className="w-3 h-3" /> Back to Theater
         </button>
 
-        <div className="grid lg:grid-cols-5 gap-6">
+        <div className="grid lg:grid-cols-5 gap-px bg-primary/10">
           {/* Problem Description */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="glass-card p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-2xl font-bold">{challenge.title}</h1>
-                <span className="glass-card px-3 py-0.5 text-xs font-mono text-primary">{challenge.category}</span>
+          <div className="lg:col-span-3 space-y-px bg-primary/10">
+            <div className="bg-black p-8">
+              <div className="flex flex-col gap-4 mb-8">
+                <div className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/40 flex items-center gap-2">
+                  <span className="w-4 h-[1px] bg-primary/20"></span>
+                  Target Objective
+                </div>
+                <div className="flex items-center gap-4">
+                  <h1 className="text-3xl font-black uppercase tracking-tighter">{challenge.title}</h1>
+                  <span className="border border-primary/20 px-3 py-0.5 text-[8px] font-bold tracking-[0.2em] uppercase text-primary/60">{challenge.category}</span>
+                </div>
               </div>
               <div className="prose prose-invert max-w-none">
-                {challenge.description.split("\n").map((line, i) => (
-                  <p key={i} className={`text-muted-foreground ${line.startsWith("URL:") ? "font-mono text-primary" : ""}`}>
-                    {line || <br />}
-                  </p>
-                ))}
+                {challenge.description.split("\n").map((line, i) => {
+                  if (line.startsWith("File:") && challenge.fileUrl) {
+                    return (
+                      <div key={i} className="flex items-center justify-between border-l-2 border-primary pl-4 py-3 bg-primary/5 my-4 group">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-[10px] font-bold tracking-[0.2em] text-primary/40 uppercase">Attached Asset</span>
+                          <p className="text-[11px] tracking-widest leading-loose uppercase text-primary font-bold">
+                            {line.substring(5).trim()}
+                          </p>
+                        </div>
+                        <a
+                          href={challenge.fileUrl}
+                          download
+                          className="bg-primary/10 hover:bg-primary text-primary hover:text-black p-3 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          <span className="text-[10px] font-black uppercase tracking-widest hidden group-hover:block px-2">Download Package</span>
+                        </a>
+                      </div>
+                    );
+                  }
+                  return (
+                    <p key={i} className={`text-[11px] tracking-widest leading-loose uppercase ${line.startsWith("File:") ? "text-primary border-l-2 border-primary pl-4 py-2 bg-primary/5" : "text-primary/70"}`}>
+                      {line || <br />}
+                    </p>
+                  );
+                })}
               </div>
             </div>
 
             {/* Hints */}
-            <div className="glass-card p-6">
-              <h3 className="font-semibold flex items-center gap-2 mb-4">
-                <Lightbulb className="w-5 h-5 text-warning" /> Hints
+            <div className="bg-black p-8 h-full">
+              <h3 className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/40 flex items-center gap-2 mb-8">
+                <Lightbulb className="w-4 h-4" /> Intelligence Briefs
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {[0, 1].map((i) => (
-                  <div key={i} className={`glass-card p-4 border ${hints[i] ? "border-warning/30" : "border-border/30"}`}>
+                  <div key={i} className={`border p-6 ${hints[i] ? "border-primary/40 bg-primary/5" : "border-primary/10 opacity-40"}`}>
                     {hints[i] ? (
-                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
-                        <span className="text-xs text-warning font-mono mb-1 block">HINT {i + 1} UNLOCKED</span>
-                        <p className="text-sm text-foreground">{hints[i]}</p>
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <span className="text-[9px] text-primary font-bold tracking-widest uppercase mb-4 block">Briefing {i + 1} Decrypted</span>
+                        <p className="text-[11px] tracking-widest leading-loose text-white uppercase">{hints[i]}</p>
                       </motion.div>
                     ) : (
-                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                        <Lock className="w-4 h-4" />
-                        <span>Hint {i + 1} unlocks at {i === 0 ? "15" : "30"} minutes</span>
+                      <div className="flex items-center gap-3 text-primary/40 text-[10px] font-bold tracking-widest uppercase">
+                        <Lock className="w-3 h-3" />
+                        <span>Briefing {i + 1} inaccessible: T-{(challenge.hintTimes[i] / 60000).toFixed(0)}m window</span>
                       </div>
                     )}
                   </div>
@@ -93,17 +122,19 @@ const ChallengePage = () => {
 
           {/* Submission Panel */}
           <div className="lg:col-span-2">
-            <div className="glass-card p-6 neon-glow sticky top-24">
-              <h3 className="font-semibold text-lg mb-2">Submit Flag</h3>
-              <p className="text-xs text-muted-foreground mb-4 font-mono">Format: FLAG&#123;...&#125;</p>
+            <div className="bg-black p-8 sticky top-24 h-full border-l border-primary/10">
+              <h3 className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/40 flex items-center gap-2 mb-8">Flag Capture</h3>
 
-              <div className="mb-4">
-                <div className="text-center">
-                  <span className="text-xs text-muted-foreground">Current Reward</span>
-                  <p className="text-4xl font-bold font-mono neon-text">{currentPoints} pts</p>
-                  {currentPoints < 100 && (
-                    <span className="text-xs text-warning flex items-center justify-center gap-1 mt-1">
-                      <AlertTriangle className="w-3 h-3" /> Reduced by hints
+              <div className="mb-12">
+                <div className="bg-primary/5 border border-primary/10 p-8 text-center relative overflow-hidden group">
+                  <div className="absolute inset-0 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
+                    <AnimatedGrid />
+                  </div>
+                  <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/40 mb-2 block relative z-10">Bounty</span>
+                  <p className="text-5xl font-black tracking-tighter text-primary relative z-10">{currentPoints}</p>
+                  {currentPoints < challenge.basePoints && (
+                    <span className="text-[8px] font-bold tracking-widest uppercase text-primary/60 flex items-center justify-center gap-1 mt-4 relative z-10">
+                      <AlertTriangle className="w-3 h-3" /> Intel Deduction Applied
                     </span>
                   )}
                 </div>
@@ -111,49 +142,61 @@ const ChallengePage = () => {
 
               {challenge.solved ? (
                 <motion.div
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  className="text-center py-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12 bg-primary text-black"
                 >
-                  <CheckCircle className="w-16 h-16 text-success mx-auto mb-3" />
-                  <p className="text-success font-bold text-lg">Challenge Solved!</p>
-                  <p className="text-muted-foreground text-sm mt-1">+{currentPoints} points earned</p>
+                  <CheckCircle className="w-12 h-12 mx-auto mb-4" />
+                  <p className="font-black text-xl tracking-tighter uppercase">Objective Secured</p>
+                  <p className="text-[10px] font-bold tracking-widest uppercase mt-2">+{currentPoints} Credits Synchronized</p>
                 </motion.div>
               ) : (
-                <>
-                  <div className="relative mb-4">
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="text-[9px] font-bold tracking-widest uppercase text-primary/40 mb-2">Input Sequence</div>
                     <input
                       type="text"
                       value={flag}
-                      onChange={(e) => setFlag(e.target.value)}
+                      onChange={(e) => setFlag(e.target.value.toUpperCase())}
                       onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                       placeholder="FLAG{...}"
-                      className="w-full bg-muted/50 border border-border/50 rounded-xl px-4 py-3 font-mono text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                      className="w-full bg-primary/5 border border-primary/20 p-4 font-bold tracking-widest text-xs focus:outline-none focus:border-primary text-white placeholder:text-primary/20 uppercase disabled:opacity-30 disabled:cursor-not-allowed"
+                      disabled={!isStarted}
                     />
                   </div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  <button
                     onClick={handleSubmit}
-                    className="w-full bg-primary text-primary-foreground font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
+                    disabled={!isStarted}
+                    className="w-full bg-primary text-black font-black uppercase tracking-[0.2em] py-5 text-xs hover:bg-white transition-colors flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-4 h-4" /> Submit Flag
-                  </motion.button>
+                    {!isStarted ? <Lock className="w-4 h-4" /> : <Send className="w-4 h-4" />}
+                    {!isStarted ? "Waiting to Start" : "Finalize Capture"}
+                  </button>
+
+                  {!isStarted && (
+                    <div className="p-4 border border-dashed border-primary/20 text-[10px] font-bold tracking-widest uppercase text-center text-primary/60">
+                      System Offline: Initialize Timer in Dashboard to enable capture
+                    </div>
+                  )}
+
+                  <div className="text-[8px] font-bold tracking-[0.3em] uppercase text-primary/30 text-center">
+                    Identity Verification Required for Authorization
+                  </div>
 
                   <AnimatePresence>
                     {result === "wrong" && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="mt-4 flex items-center gap-2 text-destructive text-sm justify-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="p-4 bg-destructive/10 border border-destructive/20 text-destructive text-[10px] font-black tracking-widest uppercase text-center flex items-center justify-center gap-2"
                       >
-                        <XCircle className="w-4 h-4" /> Incorrect flag. Try again.
+                        <XCircle className="w-4 h-4" /> Access Denied: Invalid Sequence
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </>
+                </div>
               )}
             </div>
           </div>

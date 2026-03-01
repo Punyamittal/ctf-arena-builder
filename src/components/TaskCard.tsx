@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Shield, Globe, Lock, Cpu, HelpCircle, CheckCircle } from "lucide-react";
+import { Shield, Globe, Lock, Cpu, HelpCircle, CheckCircle, Download } from "lucide-react";
 import { Challenge } from "@/data/challenges";
 import { useNavigate } from "react-router-dom";
 
@@ -12,19 +12,19 @@ const categoryIcons: Record<Challenge["category"], React.ElementType> = {
 };
 
 const categoryAccents: Record<Challenge["category"], string> = {
-  Web: "border-primary/40 hover:border-primary/70",
-  Crypto: "border-secondary/40 hover:border-secondary/70",
-  Forensics: "border-success/40 hover:border-success/70",
-  Reverse: "border-warning/40 hover:border-warning/70",
-  Misc: "border-muted-foreground/40 hover:border-muted-foreground/70",
+  Web: "border-primary/20 hover:border-primary",
+  Crypto: "border-primary/20 hover:border-primary",
+  Forensics: "border-primary/20 hover:border-primary",
+  Reverse: "border-primary/20 hover:border-primary",
+  Misc: "border-primary/20 hover:border-primary",
 };
 
 const categoryBadgeBg: Record<Challenge["category"], string> = {
-  Web: "bg-primary/15 text-primary",
-  Crypto: "bg-secondary/15 text-secondary",
-  Forensics: "bg-success/15 text-success",
-  Reverse: "bg-warning/15 text-warning",
-  Misc: "bg-muted text-muted-foreground",
+  Web: "bg-primary text-black",
+  Crypto: "bg-primary text-black",
+  Forensics: "bg-primary text-black",
+  Reverse: "bg-primary text-black",
+  Misc: "bg-primary text-black",
 };
 
 interface TaskCardProps {
@@ -42,41 +42,45 @@ const TaskCard = ({ challenge, currentPoints, index }: TaskCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
       onClick={() => navigate(`/challenge/${challenge.id}`)}
-      className={`glass-card border ${categoryAccents[challenge.category]} p-5 cursor-pointer transition-all duration-300 group ${
-        challenge.solved ? "success-glow" : ""
-      }`}
+      className={`bg-black border ${categoryAccents[challenge.category]} p-6 cursor-pointer transition-all duration-300 group`}
     >
-      <div className="flex items-start justify-between mb-3">
-        <div className={`p-2 rounded-xl ${categoryBadgeBg[challenge.category]}`}>
-          <Icon className="w-5 h-5" />
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex gap-2">
+          <div className={`p-2 ${categoryBadgeBg[challenge.category]}`}>
+            <Icon className="w-4 h-4" />
+          </div>
+          {challenge.fileUrl && (
+            <div className="p-2 border border-primary/20 text-primary/40 group-hover:border-primary/40 group-hover:text-primary transition-colors">
+              <Download className="w-4 h-4" />
+            </div>
+          )}
         </div>
         {challenge.solved ? (
-          <div className="flex items-center gap-1 text-success text-sm font-medium">
-            <CheckCircle className="w-4 h-4" />
+          <div className="flex items-center gap-1 text-primary text-[10px] font-bold uppercase tracking-widest">
+            <CheckCircle className="w-3 h-3" />
             Solved
           </div>
         ) : (
-          <span className="text-muted-foreground text-xs font-mono uppercase tracking-wider">Unsolved</span>
+          <span className="text-primary/40 text-[10px] font-bold uppercase tracking-widest">Awaiting Capture</span>
         )}
       </div>
 
-      <h3 className="text-foreground font-semibold text-lg mb-1 group-hover:neon-text transition-all">
+      <h3 className="text-white font-bold text-lg mb-2 uppercase tracking-tighter group-hover:text-primary transition-colors">
         {challenge.title}
       </h3>
 
-      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${categoryBadgeBg[challenge.category]}`}>
+      <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-primary/60 border border-primary/20 px-2 py-0.5">
         {challenge.category}
       </span>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-8 flex items-end justify-between">
         <div>
-          <span className="text-xs text-muted-foreground">Reward</span>
-          <p className="font-mono font-bold text-lg neon-text">{currentPoints} pts</p>
+          <span className="text-[10px] font-bold tracking-widest uppercase opacity-40">Value</span>
+          <p className="font-bold text-2xl tracking-tighter text-primary leading-none">{currentPoints}</p>
         </div>
-        <div className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-          Open Challenge →
+        <div className="text-[10px] font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+          Initialize <span className="text-primary">_</span>
         </div>
       </div>
     </motion.div>

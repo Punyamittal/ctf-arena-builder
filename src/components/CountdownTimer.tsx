@@ -2,15 +2,20 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface CountdownTimerProps {
-  targetTime: number; // ms timestamp
+  targetTime: number | null; // ms timestamp
   compact?: boolean;
   onComplete?: () => void;
 }
 
 const CountdownTimer = ({ targetTime, compact = false, onComplete }: CountdownTimerProps) => {
-  const [timeLeft, setTimeLeft] = useState(() => Math.max(0, targetTime - Date.now()));
+  const [timeLeft, setTimeLeft] = useState(() => (targetTime ? Math.max(0, targetTime - Date.now()) : 3600000));
 
   useEffect(() => {
+    if (!targetTime) {
+      setTimeLeft(3600000); // Reset to 1 hour if no target time
+      return;
+    }
+
     const interval = setInterval(() => {
       const remaining = Math.max(0, targetTime - Date.now());
       setTimeLeft(remaining);

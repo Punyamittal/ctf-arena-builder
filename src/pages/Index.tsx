@@ -1,189 +1,187 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Zap, Clock, Lightbulb, Trophy, ChevronDown, Shield } from "lucide-react";
+import { Shield, Lock, Search, Globe, ChevronRight, Brain } from "lucide-react";
 import AnimatedGrid from "@/components/AnimatedGrid";
-import CountdownTimer from "@/components/CountdownTimer";
 
 const Index = () => {
   const navigate = useNavigate();
-  // Competition starts in 1 hour from now for demo
-  const competitionStart = Date.now() + 3600000;
-
-  const features = [
-    {
-      icon: Clock,
-      title: "60 Minutes",
-      description: "Race against the clock. Every second counts in this high-stakes challenge.",
-    },
-    {
-      icon: Lightbulb,
-      title: "Smart Hints",
-      description: "Automatic hints unlock at 15 and 30 minutes — but they cost you points.",
-    },
-    {
-      icon: Trophy,
-      title: "Live Rankings",
-      description: "Real-time leaderboard. Climb to the top and prove your skills.",
-    },
-    {
-      icon: Shield,
-      title: "Multi-Category",
-      description: "Web, Crypto, Forensics, Reverse Engineering and more.",
-    },
-  ];
-
-  const hintSteps = [
-    { time: "0 min", points: "100 pts", label: "Full Reward", active: true },
-    { time: "15 min", points: "75 pts", label: "Hint 1 Unlocks", active: false },
-    { time: "30 min", points: "50 pts", label: "Hint 2 Unlocks", active: false },
-  ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen bg-black text-primary selection:bg-primary selection:text-black font-sans">
       <AnimatedGrid />
 
-      {/* Gradient overlay */}
-      <div className="fixed inset-0 bg-gradient-to-b from-background via-background/90 to-background pointer-events-none" />
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 bg-black/50 backdrop-blur-md border-b border-primary/10">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-sm">
+            <Brain className="w-6 h-6 text-black" />
+          </div>
+          <span className="text-xl font-bold tracking-tighter text-white">CIPHER</span>
+        </div>
+
+        <div className="hidden md:flex items-center gap-8 text-[10px] font-bold tracking-[0.2em] uppercase">
+          <a href="#" className="hover:text-white transition-colors">About</a>
+          <a href="#" className="hover:text-white transition-colors">Solutions</a>
+          <a href="#" className="hover:text-white transition-colors">Industries</a>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="border border-primary px-4 py-2 hover:bg-primary hover:text-black transition-all"
+          >
+            Boost Security
+          </button>
+        </div>
+      </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        {/* Glow orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring" }}
-            className="inline-flex items-center gap-2 glass-card neon-glow px-4 py-2 mb-8"
-          >
-            <Zap className="w-4 h-4 text-primary" />
-            <span className="text-sm font-mono text-primary">FOR 1ST & 2ND YEAR STUDENTS</span>
-          </motion.div>
-
-          <h1 className="text-6xl md:text-8xl font-bold mb-4 tracking-tight">
-            <span className="neon-text">CTF</span>{" "}
-            <span className="text-foreground">Arena</span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-muted-foreground font-mono mb-2">
-            Think. <span className="text-primary">Break.</span> Capture.
-          </p>
-          <p className="text-muted-foreground mb-10 max-w-md mx-auto">
-            A 60-minute Capture The Flag competition. Solve challenges, earn points, and climb the leaderboard.
-          </p>
-
-          <div className="flex flex-col items-center gap-8 mb-12">
-            <CountdownTimer targetTime={competitionStart} />
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/dashboard")}
-              className="glass-card neon-glow px-10 py-4 text-lg font-bold text-primary-foreground bg-primary rounded-2xl transition-all hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
+      <main className="relative pt-32 px-8">
+        <div className="max-w-7xl mx-auto">
+          <section className="mb-24">
+            <motion.h1
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-6xl md:text-8xl font-black leading-none tracking-tighter mb-8"
             >
-              Enter Arena
-            </motion.button>
-          </div>
-        </motion.div>
+              NO BREACHES,<br />
+              ONLY BOLD MOVES
+            </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 animate-bounce"
-        >
-          <ChevronDown className="w-6 h-6 text-muted-foreground" />
-        </motion.div>
-      </section>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="max-w-xl text-xs md:text-sm tracking-widest leading-relaxed text-primary/80 mb-12 uppercase"
+            >
+              We empower you to take bold actions that secure your digital world and eliminate threats.
+            </motion.p>
 
-      {/* Features Section */}
-      <section className="relative z-10 py-24 px-4">
-        <div className="max-w-5xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-3xl font-bold text-center mb-16"
-          >
-            How It <span className="neon-text">Works</span>
-          </motion.h2>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="bg-primary text-black px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors"
+              >
+                Boost Security
+              </button>
+              <button className="border border-primary/30 px-8 py-4 text-xs font-bold uppercase tracking-widest hover:border-primary transition-colors">
+                About Cipher
+              </button>
+            </div>
+          </section>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, i) => (
+          {/* Globe Visualization */}
+          <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <img
+                src="/cyber_globe_yellow_1772395672788.png"
+                alt="Cyber Globe"
+                className="w-full max-w-4xl opacity-60 mix-blend-screen"
+              />
+            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none" />
+          </section>
+
+          {/* Feature Cards */}
+          <section className="grid md:grid-cols-3 gap-1 mb-32 border-t border-primary/10">
+            {[
+              {
+                icon: Shield,
+                title: "Network Security",
+                desc: "Safeguard your network infrastructure against unauthorized access and attacks."
+              },
+              {
+                icon: Lock,
+                title: "Security Audits",
+                desc: "Comprehensive security reviews to ensure compliance, protection, and efficiency."
+              },
+              {
+                icon: Search,
+                title: "Forensics Analysis",
+                desc: "In-depth investigations to understand breaches and prevent future occurrences."
+              }
+            ].map((f, i) => (
               <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
+                key={f.title}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card p-6 text-center group hover:neon-glow transition-all duration-300"
+                transition={{ delay: i * 0.2 }}
+                className="border-r border-b border-primary/10 p-8 hover:bg-primary/5 transition-colors group"
               >
-                <div className="inline-flex p-3 rounded-xl bg-primary/10 mb-4 group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <f.icon className="w-6 h-6 mb-6 group-hover:scale-110 transition-transform" />
+                <h3 className="text-sm font-bold uppercase tracking-widest mb-4">{f.title}</h3>
+                <p className="text-[10px] tracking-wider leading-relaxed text-primary/60">{f.desc}</p>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Hint System Explanation */}
-      <section className="relative z-10 py-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-3xl font-bold text-center mb-4"
-          >
-            Hint <span className="neon-text">System</span>
-          </motion.h2>
-          <p className="text-center text-muted-foreground mb-12">
-            Hints unlock automatically over time — but each one reduces your potential reward.
-          </p>
+          {/* Tailored Solutions Text */}
+          <section className="mb-32">
+            <div className="text-[10px] font-bold tracking-[0.3em] uppercase mb-8 flex items-center gap-2">
+              <span className="w-8 h-[1px] bg-primary"></span>
+              About Cipher
+            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-4xl md:text-5xl font-bold tracking-tighter max-w-4xl"
+            >
+              WE PROVIDE TAILORED CYBERSECURITY SOLUTIONS TO PROTECT YOUR BUSINESS FROM DIGITAL THREATS.
+            </motion.h2>
+          </section>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            {hintSteps.map((step, i) => (
-              <motion.div
-                key={step.time}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="flex-1 w-full"
-              >
-                <div
-                  className={`glass-card p-6 text-center ${
-                    i === 0 ? "neon-glow" : i === 1 ? "violet-glow" : "border-destructive/30"
-                  }`}
-                >
-                  <div className="font-mono text-sm text-muted-foreground mb-1">{step.time}</div>
-                  <div className={`text-2xl font-bold font-mono ${i === 0 ? "neon-text" : i === 1 ? "text-secondary" : "text-destructive"}`}>
-                    {step.points}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">{step.label}</div>
+          {/* Mission / Vision Section */}
+          <section className="grid md:grid-cols-2 gap-px bg-primary/10 mb-32">
+            {[
+              {
+                title: "Mission",
+                text: "At Cipher, our mission is to provide innovative cybersecurity solutions that protect businesses and ensure data resilience in a dynamic cyber landscape."
+              },
+              {
+                title: "Vision",
+                text: "Our vision is to be a global leader in cybersecurity, creating a secure digital future for businesses through innovation and resilience against cyber threats."
+              }
+            ].map((item, i) => (
+              <div key={item.title} className="bg-black p-12 relative group overflow-hidden">
+                <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <AnimatedGrid />
                 </div>
-                {i < hintSteps.length - 1 && (
-                  <div className="hidden md:block text-center text-muted-foreground mt-2">→</div>
-                )}
-              </motion.div>
+                <h4 className="text-xl font-bold uppercase tracking-[0.2em] mb-12 flex items-center gap-2">
+                  <span className="text-primary/40">/</span> {item.title}
+                </h4>
+                <p className="text-[10px] tracking-widest leading-loose text-primary/70 uppercase">
+                  {item.text}
+                </p>
+              </div>
             ))}
+          </section>
+        </div>
+      </main>
+
+      {/* Footer / Floating Bar */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 px-8 py-4 bg-black/80 backdrop-blur-xl border-t border-primary/10">
+        <div className="flex justify-between items-center max-w-7xl mx-auto">
+          <div className="flex gap-4 text-[8px] font-bold tracking-[0.3em] uppercase opacity-40">
+            <span>Strategy</span>
+            <span>Security</span>
+            <span>Resilience</span>
+            <span>Empowerment</span>
+          </div>
+          <div className="flex gap-4">
+            <button className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase border border-primary/20 px-4 py-2 hover:bg-primary hover:text-black transition-all">
+              <ChevronRight className="w-3 h-3 rotate-[-45deg]" /> Visit site
+            </button>
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase bg-primary/10 border border-primary/40 px-4 py-2 hover:bg-primary hover:text-black transition-all"
+            >
+              Explore <Search className="w-3 h-3" />
+            </button>
           </div>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative z-10 py-8 text-center text-sm text-muted-foreground border-t border-border/30">
-        <p className="font-mono">CTF Arena © 2026 — Built for learners, by hackers.</p>
       </footer>
     </div>
   );
