@@ -154,69 +154,75 @@ High-level system design, data flows, API map, and workflow pipelines derived fr
 ```mermaid
 graph TB
     subgraph Client["Client Layer"]
-        user["User / Operator"]
-        api_client["API / CLI Client"]
+        user["User"]
+        browser["Browser / Client"]
     end
 
-    subgraph Core["src/ — Application Core"]
+    subgraph Core["Ctf Arena Builder — Web App"]
+        AdminControl["AdminControl<br/>Component"]
+        AnimatedGrid["AnimatedGrid<br/>Component"]
+        CountdownTimer["CountdownTimer<br/>Component"]
+        DashboardLayout["DashboardLayout<br/>Component"]
+        NavLink["NavLink<br/>Component"]
+        TaskCard["TaskCard<br/>Component"]
+        accordion["accordion<br/>Component"]
+        alert_dialog["alert-dialog<br/>Component"]
+        alert["alert<br/>Component"]
+        aspect_ratio["aspect-ratio<br/>Component"]
+        avatar["avatar<br/>Component"]
+        badge["badge<br/>Component"]
     end
 
     subgraph Data["Data & Artifacts"]
-        datasets["Datasets · JSON · CSV"]
+        assets["Static assets · public/"]
+        config["Config · env / JSON"]
     end
 
-    subgraph Charts["Metrics & Dashboard Charts"]
-        page_views["Page views chart"]
-        nav_sections["Navigation sections map"]
-        project_showcase["Project showcase grid"]
-        skills_timeline["Skills & experience timeline"]
-        contact_funnel["Contact conversion funnel"]
-        media_gallery["Media & assets gallery"]
+    subgraph Charts["ctf-arena-builder — Metrics & Views"]
+        docs["docs/ module"]
     end
 
-    user --> api_client
-    api_client --> Core
-    user -->|Web UI| dashboard_kpis
-    Core --> page_views
-    page_views --> user
+    user --> browser
+    browser --> Core
+    docs --> user
 ```
 
 ### Data Flow & Charts Pipeline
 
 ```mermaid
 flowchart LR
-    U["User / Event"] --> IN["Untrusted Input"]
+    U["User / Event"] --> IN["User Action"]
 
-    subgraph Pipeline["Processing Pipeline"]
-        p0["Input"]
-        p1["Processing"]
-        p2["Output"]
+    subgraph Pipeline["ctf-arena-builder App Flow"]
+        p0["Admincontrol"]
+        p1["Animatedgrid"]
+        p2["Countdowntimer"]
+        p3["Dashboardlayout"]
+        p4["Navlink"]
+        p5["Taskcard"]
         p0 --> p1
         p1 --> p2
+        p2 --> p3
+        p3 --> p4
+        p4 --> p5
     end
 
-    subgraph Metrics["Metrics & Chart Feeds"]
-        page_views["Page views chart"]
-        nav_sections["Navigation sections map"]
-        project_showcase["Project showcase grid"]
-        skills_timeline["Skills & experience timeline"]
-        contact_funnel["Contact conversion funnel"]
-        media_gallery["Media & assets gallery"]
+    subgraph Metrics["ctf-arena-builder — Views & Metrics"]
+        docs["docs/ module"]
     end
 
     IN --> p0
-    p2 --> OUT["Authorized Output"]
+    p5 --> OUT["UI Response"]
     OUT --> U
-    p2 --> page_views
-    page_views --> U
+    p5 --> docs
+    docs --> U
 ```
 
 ### Component & API Map
 
 ```mermaid
 graph LR
-    subgraph App["src Components"]
-        main["main<br/>Main"]
+    subgraph App["ctf-arena-builder Components"]
     end
 ```
 
@@ -225,6 +231,13 @@ graph LR
 ```mermaid
 mindmap
   root((ctf-arena-builder))
+    Core
+      Admincontrol
+      Animatedgrid
+      Countdowntimer
+      Dashboardlayout
+      Navlink
+      Taskcard
     Web UI
       dashboard
 ```
